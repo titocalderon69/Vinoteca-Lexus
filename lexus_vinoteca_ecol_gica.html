@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lexus Vinoteca Ecológica | Muebles de Madera Sustentable</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        wineDeep: '#1A030A',
+                        wineMain: '#3B0915',
+                        wineLight: '#5C1224',
+                        wineGlow: '#801F37',
+                        ecoGreen: '#2D5A3F',
+                        ecoGreenLight: '#417A57',
+                        gold: '#D4AF37',
+                        goldLight: '#E8C86B',
+                        wood: '#8B5A2B'
+                    },
+                    fontFamily: {
+                        cinzel: ['Cinzel', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #1A030A;
+            color: #F3EAE1;
+            overflow-x: hidden;
+        }
+
+        /* Gradient Animated Background */
+        .animated-bg {
+            background: linear-gradient(-45deg, #120207, #320712, #4F0E1E, #23040C, #180208);
+            background-size: 400% 400%;
+            animation: gradientMove 14s ease infinite;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .canvas-container canvas {
+            outline: none;
+            cursor: grab;
+        }
+        .canvas-container canvas:active {
+            cursor: grabbing;
+        }
+
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #FFF0B3 0%, #D4AF37 50%, #9E7B15 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .glass-card {
+            background: rgba(35, 6, 14, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(212, 175, 55, 0.25);
+        }
+
+        .glass-card-hover {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .glass-card-hover:hover {
+            border-color: rgba(212, 175, 55, 0.6);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px -15px rgba(128, 31, 55, 0.5);
+        }
+
+        /* Simulator Frame for Device Testing */
+        .mobile-preview-frame {
+            max-width: 440px !important;
+            margin: 0 auto;
+            border: 12px solid #2d1822;
+            border-radius: 40px;
+            box-shadow: 0 25px 60px -15px rgba(0,0,0,0.9), 0 0 30px rgba(212, 175, 55, 0.3);
+            transition: all 0.5s ease-in-out;
+            position: relative;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #120207;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #5C1224;
+            border-radius: 5px;
+            border: 2px solid #120207;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #801F37;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased animated-bg text-stone-200 min-h-screen relative">
+
+    <!-- Canvas para Partículas de Fondo Interactivas -->
+    <canvas id="bgParticles" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0 opacity-60"></canvas>
+
+    <!-- Mobile View Simulator Toggle Switch -->
+    <div class="fixed bottom-6 left-6 z-50 flex items-center bg-wineDeep/90 backdrop-blur-md border border-gold/40 rounded-full p-1.5 shadow-2xl">
+        <button id="toggleDesktopBtn" onclick="setDeviceView('desktop')" class="px-3.5 py-1.5 rounded-full text-xs font-bold transition-all text-gold bg-gold/20 flex items-center gap-2">
+            <i class="fa-solid fa-desktop text-sm"></i> <span class="hidden sm:inline">Pantalla Completa</span>
+        </button>
+        <button id="toggleMobileBtn" onclick="setDeviceView('mobile')" class="px-3.5 py-1.5 rounded-full text-xs font-bold transition-all text-stone-400 hover:text-gold flex items-center gap-2">
+            <i class="fa-solid fa-mobile-screen-button text-sm"></i> <span>Vista Celular</span>
+        </button>
+    </div>
+
+    <div id="deviceContainer" class="w-full transition-all duration-500">
+
+    <!-- Header / Navbar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-wineDeep/90 backdrop-blur-md text-white border-b border-gold/30 shadow-2xl transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="#" class="flex items-center space-x-3 group">
+                <div class="w-10 h-10 rounded-full bg-gold/10 border border-gold flex items-center justify-center group-hover:scale-105 transition-transform shadow-lg shadow-gold/20">
+                    <span class="font-cinzel text-gold text-xl font-black">L</span>
+                </div>
+                <div>
+                    <span class="font-cinzel text-xl sm:text-2xl font-bold tracking-wider text-gold block leading-none">LEXUS</span>
+                    <span class="text-[9px] tracking-widest text-stone-400 uppercase font-semibold">Vinoteca Ecológica</span>
+                </div>
+            </a>
+
+            <!-- Navigation Links -->
+            <div class="hidden md:flex items-center space-x-8 text-sm font-medium">
+                <a href="#catalogo" class="hover:text-gold transition-colors flex items-center gap-2 text-stone-300"><i class="fa-solid fa-wine-bottle text-xs text-gold"></i> Catálogo 360°</a>
+                <a href="#nosotros" class="hover:text-gold transition-colors flex items-center gap-2 text-stone-300"><i class="fa-solid fa-users text-xs text-gold"></i> Nosotros</a>
+                <a href="#video" class="hover:text-gold transition-colors flex items-center gap-2 text-stone-300"><i class="fa-solid fa-play text-xs text-gold"></i> Video</a>
+                <a href="#contacto" class="hover:text-gold transition-colors flex items-center gap-2 text-stone-300"><i class="fa-solid fa-envelope text-xs text-gold"></i> Contacto</a>
+            </div>
+
+            <!-- Call / WhatsApp / IG Action Buttons -->
+            <div class="flex items-center space-x-3">
+                <a href="https://instagram.com/lexus.sanmartin" target="_blank" rel="noopener noreferrer" class="hidden sm:inline-flex items-center px-3.5 py-2 rounded-full border border-pink-500/40 text-pink-400 hover:bg-pink-600 hover:text-white text-xs font-semibold transition-all gap-1.5 shadow-md">
+                    <i class="fa-brands fa-instagram text-sm"></i> @lexus.sanmartin
+                </a>
+                <a href="tel:2634785174" class="hidden lg:inline-flex items-center px-4 py-2 rounded-full border border-gold/40 text-gold text-xs font-semibold hover:bg-gold hover:text-wineDeep transition-all">
+                    <i class="fa-solid fa-phone mr-2"></i> 263 478-5174
+                </a>
+                <a href="https://wa.me/5492634785174?text=Buenas!%20Hola%20Lexus!%20Quisiera%20encargar%20un%20mueble%20artesanal" target="_blank" rel="noopener noreferrer" class="bg-ecoGreen hover:bg-ecoGreenLight text-white px-5 py-2.5 rounded-full text-xs font-bold tracking-wider shadow-lg hover:shadow-ecoGreen/50 transition-all flex items-center space-x-2 border border-white/20">
+                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                    <span>PEDIR AHORA</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen pt-28 pb-16 flex items-center justify-center overflow-hidden z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            
+            <div class="max-w-3xl mx-auto space-y-6 text-center">
+                <div class="inline-flex items-center px-4 py-1.5 rounded-full bg-gold/10 border border-gold/40 text-gold text-xs font-bold tracking-widest uppercase shadow-md">
+                    <i class="fa-solid fa-leaf mr-2 text-ecoGreenLight"></i> Artesanal • Sustentable • Mendoza
+                </div>
+                <h1 class="font-cinzel text-4xl sm:text-6xl font-black tracking-tight leading-tight drop-shadow-lg">
+                    Muebles Ecológicos <br>
+                    <span class="gold-gradient-text">Tu Vino Bien Guardado</span>
+                </h1>
+                <p class="text-stone-300 text-base sm:text-lg max-w-2xl mx-auto font-light leading-relaxed">
+                    Organizadores exclusivos elaborados a mano con madera de pallet recuperada por estudiantes de San Martín, Mendoza. Un toque distinguido y sustentable para tu hogar.
+                </p>
+                
+                <div class="pt-4 flex flex-wrap justify-center gap-4">
+                    <a href="#catalogo" class="bg-gold hover:bg-goldLight text-wineDeep px-8 py-4 rounded-full font-bold shadow-xl hover:shadow-gold/30 transition-all text-sm tracking-wider flex items-center gap-3">
+                        <span>EXPLORAR MODELOS 3D</span>
+                        <i class="fa-solid fa-arrow-down"></i>
+                    </a>
+                    <a href="https://instagram.com/lexus.sanmartin" target="_blank" rel="noopener noreferrer" class="border border-pink-500/50 text-pink-300 hover:bg-pink-500 hover:text-white px-7 py-4 rounded-full font-semibold transition-all text-sm tracking-wider backdrop-blur-sm flex items-center gap-2">
+                        <i class="fa-brands fa-instagram text-lg"></i> INSTAGRAM: @lexus.sanmartin
+                    </a>
+                </div>
+
+                <!-- Features Highlights -->
+                <div class="grid grid-cols-3 gap-2 sm:gap-4 pt-8 border-t border-gold/20 max-w-lg mx-auto">
+                    <div class="bg-wineMain/40 p-2 sm:p-3 rounded-2xl border border-gold/10 flex flex-col justify-center items-center text-center">
+                        <span class="font-cinzel text-xl sm:text-2xl font-bold text-gold block">100%</span>
+                        <span class="text-[10px] sm:text-[11px] text-stone-300 leading-tight">Madera Reciclada</span>
+                    </div>
+                    <div class="bg-wineMain/40 p-2 sm:p-3 rounded-2xl border border-gold/10 flex flex-col justify-center items-center text-center">
+                        <span class="font-cinzel text-lg sm:text-2xl font-bold text-gold block leading-tight">A Mano</span>
+                        <span class="text-[10px] sm:text-[11px] text-stone-300 leading-tight">Hecho en Mendoza</span>
+                    </div>
+                    <div class="bg-wineMain/40 p-2 sm:p-3 rounded-2xl border border-gold/10 flex flex-col justify-center items-center text-center">
+                        <span class="font-cinzel text-base sm:text-2xl font-bold text-gold block leading-tight">Estrada</span>
+                        <span class="text-[10px] sm:text-[11px] text-stone-300 leading-tight">Escuela 4-089</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Separator Ribbon -->
+    <div class="bg-gradient-to-r from-wineLight via-gold to-wineLight text-wineDeep py-3 px-4 shadow-xl z-20 relative border-y border-gold/40 overflow-hidden">
+        <div class="flex flex-wrap justify-center sm:justify-around items-center font-cinzel text-[10px] sm:text-xs font-black tracking-widest uppercase text-wineDeep gap-x-2 gap-y-1 text-center">
+            <span><i class="fa-solid fa-wine-glass mr-1"></i> DISEÑO SUSTENTABLE</span>
+            <span class="hidden sm:inline">•</span>
+            <span class="hidden sm:inline"><i class="fa-solid fa-tree mr-1"></i> PALLETS RECUPERADOS</span>
+            <span>•</span>
+            <span><i class="fa-solid fa-hammer mr-1"></i> TRABAJO ARTESANAL</span>
+            <span class="hidden md:inline">•</span>
+            <span class="hidden md:inline"><i class="fa-solid fa-location-dot mr-1"></i> SAN MARTÍN, MENDOZA</span>
+        </div>
+    </div>
+
+    <!-- Catalogo de Vinotecas 360 -->
+    <section id="catalogo" class="py-24 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                <span class="text-gold font-bold text-xs tracking-widest uppercase bg-gold/10 px-4 py-1.5 rounded-full border border-gold/30">Visualizador Interactivo 3D</span>
+                <h2 class="font-cinzel text-3xl sm:text-5xl font-extrabold gold-gradient-text">Modelos de Vinotecas</h2>
+                <p class="text-stone-300 text-sm sm:text-base">
+                    Haz clic y arrastra cada vinoteca para inspeccionar sus terminaciones en 360°.
+                </p>
+            </div>
+
+            <!-- Cards de los 2 Modelos -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-stretch">
+                
+                <!-- MODELO 1: Vinoteca Grande (Exacta a la imagen de la carpeta: 4 tablas verticales + 2 botellas inclinadas) -->
+                <div class="glass-card glass-card-hover rounded-3xl overflow-hidden flex flex-col justify-between">
+                    <div class="p-6 bg-wineDeep/80 border-b border-gold/20 text-white relative">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="bg-gold text-wineDeep text-[11px] font-black px-3 py-1 rounded-full uppercase tracking-wider">Modelo Grande</span>
+                            <span class="text-xs text-gold/80"><i class="fa-solid fa-rotate mr-1"></i> Interactivo 360°</span>
+                        </div>
+                        <h3 class="font-cinzel text-2xl font-bold text-gold">Vinoteca Grande</h3>
+                        <p class="text-xs text-stone-300">4 tablas verticales de madera con 2 repisas inclinadas y tope protector.</p>
+                    </div>
+
+                    <!-- Visualizador Three.js -->
+                    <div class="relative h-80 bg-black/80 canvas-container border-y border-gold/20" id="canvas-container-1">
+                        <div class="absolute top-3 left-3 z-10 bg-wineDeep/80 backdrop-blur-md px-3 py-1.5 rounded-lg text-[11px] text-stone-200 border border-gold/30 pointer-events-none">
+                            <i class="fa-solid fa-hand-pointer text-gold mr-1"></i> Arrastra para rotar en 3D
+                        </div>
+                        <div class="absolute bottom-3 right-3 z-10 bg-gold text-wineDeep font-bold text-xs px-3.5 py-1 rounded-full shadow-lg pointer-events-none">
+                            Capacidad: 2 Botellas
+                        </div>
+                    </div>
+
+                    <!-- Detalles y Compra -->
+                    <div class="p-6 flex-1 flex flex-col justify-between space-y-6">
+                        <div class="space-y-3">
+                            <h4 class="font-bold text-gold text-sm">Detalles Técnicos:</h4>
+                            <ul class="text-xs text-stone-300 space-y-2">
+                                <li class="flex items-center"><i class="fa-solid fa-check text-gold mr-2"></i> **Fondo de 4 tablas verticales** de madera tratada.</li>
+                                <li class="flex items-center"><i class="fa-solid fa-check text-gold mr-2"></i> **2 repisas en ángulo** para reposo inclinado de 2 botellas de vino.</li>
+                                <li class="flex items-center"><i class="fa-solid fa-check text-gold mr-2"></i> **Tope vertical de madera al final** de cada repisa para sostener la botella.</li>
+                            </ul>
+                        </div>
+
+                        <div class="pt-4 border-t border-gold/20 flex items-center justify-between">
+                            <div>
+                                <span class="text-[11px] text-stone-400 block uppercase font-bold">Precio Especial</span>
+                                <span class="font-cinzel text-3xl font-bold text-gold">$13.875</span>
+                            </div>
+                            <button onclick="encargarProducto('Vinoteca Grande (2 Botellas Inclinadas)', '$13.875')" class="bg-ecoGreen hover:bg-ecoGreenLight text-white px-6 py-3.5 rounded-full font-bold text-xs tracking-wider transition-all shadow-lg flex items-center gap-2 border border-white/20">
+                                <i class="fa-brands fa-whatsapp text-lg"></i> ENCARGAR AHORA
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MODELO 2: Vinoteca con Copero (4 Botellas + 3 Vasos) -->
+                <div class="glass-card glass-card-hover rounded-3xl overflow-hidden flex flex-col justify-between">
+                    <div class="p-6 bg-wineDeep/80 border-b border-gold/20 text-white relative">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="bg-ecoGreen text-white text-[11px] font-black px-3 py-1 rounded-full uppercase tracking-wider">Con Copero</span>
+                            <span class="text-xs text-gold/80"><i class="fa-solid fa-rotate mr-1"></i> Interactivo 360°</span>
+                        </div>
+                        <h3 class="font-cinzel text-2xl font-bold text-gold">Vinoteca con Copero</h3>
+                        <p class="text-xs text-stone-300">Marco robusto con división a la mitad para 4 botellas y 3 vasos/copas.</p>
+                    </div>
+
+                    <!-- Visualizador Three.js -->
+                    <div class="relative h-80 bg-black/80 canvas-container border-y border-gold/20" id="canvas-container-2">
+                        <div class="absolute top-3 left-3 z-10 bg-wineDeep/80 backdrop-blur-md px-3 py-1.5 rounded-lg text-[11px] text-stone-200 border border-gold/30 pointer-events-none">
+                            <i class="fa-solid fa-hand-pointer text-gold mr-1"></i> Arrastra para rotar en 3D
+                        </div>
+                        <div class="absolute bottom-3 right-3 z-10 bg-gold text-wineDeep font-bold text-xs px-3.5 py-1 rounded-full shadow-lg pointer-events-none">
+                            Capacidad: 4 Botellas y 3 Vasos
+                        </div>
+                    </div>
+
+                    <!-- Detalles y Compra -->
+                    <div class="p-6 flex-1 flex flex-col justify-between space-y-6">
+                        <div class="space-y-3">
+                            <h4 class="font-bold text-gold text-sm">Detalles Técnicos:</h4>
+                            <ul class="text-xs text-stone-300 space-y-2">
+                                <li class="flex items-center"><i class="fa-solid fa-check text-gold mr-2"></i> **Marco rectangular completo** en madera maciza recuperada.</li>
+                                <li class="flex items-center"><i class="fa-solid fa-check text-gold mr-2"></i> **Estante a la mitad a la izquierda** con lugar para **4 botellas** (2 abajo y 2 arriba).</li>
+                                <li class="flex items-center"><i class="fa-solid fa-check text-gold mr-2"></i> **Sección lateral con 3 compartimentos** para alojar **3 vasos** de vidrio.</li>
+                            </ul>
+                        </div>
+
+                        <div class="pt-4 border-t border-gold/20 flex items-center justify-between">
+                            <div>
+                                <span class="text-[11px] text-stone-400 block uppercase font-bold">Precio Especial</span>
+                                <span class="font-cinzel text-3xl font-bold text-gold">$9.000</span>
+                            </div>
+                            <button onclick="encargarProducto('Vinoteca con Copero (4 Botellas y 3 Vasos)', '$9.000')" class="bg-ecoGreen hover:bg-ecoGreenLight text-white px-6 py-3.5 rounded-full font-bold text-xs tracking-wider transition-all shadow-lg flex items-center gap-2 border border-white/20">
+                                <i class="fa-brands fa-whatsapp text-lg"></i> ENCARGAR AHORA
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Sobre Nosotros / Proyecto Educativo -->
+    <section id="nosotros" class="py-24 relative z-10 border-t border-gold/20 bg-wineDeep/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                <span class="text-gold font-bold text-xs tracking-widest uppercase border border-gold/30 px-4 py-1.5 rounded-full bg-gold/10">San Martín • Mendoza</span>
+                <h2 class="font-cinzel text-3xl sm:text-5xl font-extrabold text-gold">Sobre Lexus</h2>
+                <p class="text-stone-300 text-sm sm:text-base leading-relaxed">
+                    Somos estudiantes de la <strong class="text-gold">Escuela N° 4-089 José Manuel Estrada</strong>. Creamos organizadores de madera con materiales 100% sustentables y recuperados, cuidando el medio ambiente mendocino.
+                </p>
+                <p class="text-xs text-amber-200/80 italic font-medium">
+                    (Aclaración: Comercializamos exclusivamente el mueble organizador artesanal).
+                </p>
+            </div>
+
+            <!-- Integrantes del Equipo -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <div class="glass-card rounded-2xl p-6 text-center border-gold/20">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gold/10 border-2 border-gold flex items-center justify-center text-gold text-xl font-bold font-cinzel">
+                        TR
+                    </div>
+                    <h3 class="font-cinzel text-base font-bold text-gold">Thiago Roldán</h3>
+                    <p class="text-[11px] text-ecoGreenLight font-bold uppercase mt-0.5">Coordinación</p>
+                    <p class="text-xs text-stone-300 mt-2"><i class="fa-solid fa-user-gear text-gold mr-1"></i> Líder de Equipo</p>
+                </div>
+
+                <div class="glass-card rounded-2xl p-6 text-center border-gold/20">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gold/10 border-2 border-gold flex items-center justify-center text-gold text-xl font-bold font-cinzel">
+                        DP
+                    </div>
+                    <h3 class="font-cinzel text-base font-bold text-gold">Diego Páez</h3>
+                    <p class="text-[11px] text-ecoGreenLight font-bold uppercase mt-0.5">Producción</p>
+                    <p class="text-xs text-stone-300 mt-2"><i class="fa-solid fa-hammer text-gold mr-1"></i> Carpintería Artesanal</p>
+                </div>
+
+                <div class="glass-card rounded-2xl p-6 text-center border-gold/20">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gold/10 border-2 border-gold flex items-center justify-center text-gold text-xl font-bold font-cinzel">
+                        JG
+                    </div>
+                    <h3 class="font-cinzel text-base font-bold text-gold">Julieta Galdame</h3>
+                    <p class="text-[11px] text-ecoGreenLight font-bold uppercase mt-0.5">Ventas</p>
+                    <p class="text-xs text-stone-300 mt-2"><i class="fa-solid fa-store text-gold mr-1"></i> Comercialización</p>
+                </div>
+
+                <div class="glass-card rounded-2xl p-6 text-center border-gold/20">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gold/10 border-2 border-gold flex items-center justify-center text-gold text-xl font-bold font-cinzel">
+                        MC
+                    </div>
+                    <h3 class="font-cinzel text-base font-bold text-gold">Matías Chaves</h3>
+                    <p class="text-[11px] text-ecoGreenLight font-bold uppercase mt-0.5">Administración</p>
+                    <p class="text-xs text-stone-300 mt-2"><i class="fa-solid fa-calculator text-gold mr-1"></i> Finanzas y Costos</p>
+                </div>
+
+            </div>
+
+            <!-- Banner Institucional con Redes -->
+            <div class="mt-16 glass-card rounded-3xl p-8 border-gold/30 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="space-y-2 text-center md:text-left">
+                    <h4 class="font-cinzel text-xl font-bold text-gold">Escuela José Manuel Estrada</h4>
+                    <p class="text-xs text-stone-300">San Martín, Mendoza • Carpeta de Campo • Curso 5º 2ª</p>
+                    <p class="text-[11px] text-stone-400">Medios de Pago: Efectivo y Mercado Pago</p>
+                </div>
+                <div class="flex flex-wrap gap-3 justify-center">
+                    <a href="https://instagram.com/lexus.sanmartin" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-amber-500 via-rose-500 to-purple-600 text-white px-6 py-3 rounded-full font-bold text-xs uppercase tracking-wider hover:opacity-90 transition-opacity flex items-center gap-2 shadow-lg">
+                        <i class="fa-brands fa-instagram text-base"></i> Instagram: @lexus.sanmartin
+                    </a>
+                    <a href="https://wa.me/5492634785174?text=Buenas!%20Hola%20Lexus!%20Quisiera%20encargar%20un%20mueble%20artesanal" target="_blank" rel="noopener noreferrer" class="bg-gold text-wineDeep px-6 py-3 rounded-full font-bold text-xs uppercase tracking-wider hover:bg-goldLight transition-colors flex items-center gap-2 shadow-lg">
+                        <i class="fa-brands fa-whatsapp text-base"></i> WHATSAPP DIRECTO
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Sección Video Institucional -->
+    <section id="video" class="py-24 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Video Container -->
+                <div class="lg:col-span-7">
+                    <div class="relative bg-black rounded-3xl overflow-hidden border border-gold/30 shadow-2xl aspect-video flex items-center justify-center">
+                        <video controls preload="metadata" class="w-full h-full object-contain" playsinline>
+                            <source src="Lexus_video_final.mp4" type="video/mp4">
+                            Tu navegador no soporta video HTML5.
+                        </video>
+                    </div>
+                </div>
+
+                <!-- Transcripción / Guion -->
+                <div class="lg:col-span-5 space-y-6">
+                    <span class="text-gold font-bold text-xs tracking-widest uppercase bg-gold/10 px-4 py-1.5 rounded-full border border-gold/30">Fabricación Artesanal</span>
+                    <h2 class="font-cinzel text-3xl font-bold text-gold">Video Institucional</h2>
+                    
+                    <div class="glass-card rounded-2xl p-6 border-gold/20 space-y-4 max-h-80 overflow-y-auto">
+                        <div class="border-l-2 border-gold pl-4 space-y-1">
+                            <span class="text-[10px] text-gold uppercase font-bold">Presentación</span>
+                            <p class="text-xs text-stone-300 italic">"Hola, somos Thiago, Diego, Julieta y Matías, estudiantes de la Escuela José Manuel Estrada de San Martín, Mendoza..."</p>
+                        </div>
+                        <div class="border-l-2 border-ecoGreen pl-4 space-y-1">
+                            <span class="text-[10px] text-ecoGreenLight uppercase font-bold">Proceso</span>
+                            <p class="text-xs text-stone-300 italic">"Fabricamos vinotecas de madera hechas a mano. Medimos, cortamos y lijamos cada pieza de pallet recuperado..."</p>
+                        </div>
+                        <div class="border-l-2 border-gold pl-4 space-y-1">
+                            <span class="text-[10px] text-gold uppercase font-bold">Acabados</span>
+                            <p class="text-xs text-stone-300 italic">"Unimos con cola y clavos para armar la estructura firme antes del barnizado y control final."</p>
+                        </div>
+                    </div>
+
+                    <a href="https://wa.me/5492634785174?text=Buenas!%20Hola%20Lexus!%20Quisiera%20encargar%20un%20mueble%20artesanal" target="_blank" class="inline-flex items-center text-gold font-bold text-xs tracking-wider hover:text-goldLight transition-colors">
+                        HAZER CONSULTA DIRECTA <i class="fa-solid fa-chevron-right ml-2 text-xs"></i>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer & Contacto Directo -->
+    <footer id="contacto" class="bg-wineDeep text-white pt-16 pb-12 border-t border-gold/30 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 pb-12 border-b border-gold/20">
+                
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-gold/20 border border-gold flex items-center justify-center">
+                            <span class="font-cinzel text-gold text-xl font-black">L</span>
+                        </div>
+                        <span class="font-cinzel text-2xl font-bold text-gold">LEXUS</span>
+                    </div>
+                    <p class="text-xs text-stone-400 leading-relaxed">
+                        Muebles artesanos de madera recuperada. Hecho a mano con compromiso ambiental en San Martín, Mendoza.
+                    </p>
+                </div>
+
+                <div class="space-y-3">
+                    <h4 class="font-cinzel text-gold font-bold text-sm">Contacto Directo</h4>
+                    <p class="text-xs text-stone-300 flex items-center gap-2">
+                        <i class="fa-solid fa-phone text-gold"></i> 263 478-5174
+                    </p>
+                    <a href="https://instagram.com/lexus.sanmartin" target="_blank" rel="noopener noreferrer" class="text-xs text-stone-300 hover:text-gold flex items-center gap-2 transition-colors font-bold">
+                        <i class="fa-brands fa-instagram text-pink-400"></i> Instagram: @lexus.sanmartin
+                    </a>
+                    <p class="text-xs text-stone-300 flex items-center gap-2">
+                        <i class="fa-solid fa-location-dot text-gold"></i> Escuela José Manuel Estrada (San Martín, Mendoza)
+                    </p>
+                </div>
+
+                <div class="space-y-4">
+                    <h4 class="font-cinzel text-gold font-bold text-sm">Encargá por WhatsApp</h4>
+                    <a href="https://wa.me/5492634785174?text=Buenas!%20Hola%20Lexus!%20Quisiera%20encargar%20un%20mueble%20artesanal" target="_blank" class="w-full bg-ecoGreen hover:bg-ecoGreenLight text-white py-3.5 rounded-full text-xs font-bold tracking-wider flex items-center justify-center gap-2 transition-all shadow-lg border border-white/20">
+                        <i class="fa-brands fa-whatsapp text-lg"></i> ENVIAR MENSAJE DIRECTO
+                    </a>
+                </div>
+
+            </div>
+
+            <div class="pt-8 text-center text-xs text-stone-500">
+                <p>&copy; 2026 Lexus Vinoteca Ecológica. Escuela José Manuel Estrada. San Martín, Mendoza.</p>
+            </div>
+        </div>
+    </footer>
+
+    </div> <!-- Fin deviceContainer -->
+
+    <!-- Botón Flotante de WhatsApp -->
+    <a href="https://wa.me/5492634785174?text=Buenas!%20Hola%20Lexus!%20Quisiera%20encargar%20un%20mueble%20artesanal" target="_blank" class="fixed bottom-6 right-6 z-50 bg-ecoGreen hover:bg-ecoGreenLight text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-all border-2 border-white/80">
+        <i class="fa-brands fa-whatsapp text-3xl"></i>
+    </a>
+
+    <!-- SCRIPTS TÉCNICOS & RENDERIZADO 3D -->
+    <script>
+        // Simulador de Vista Mobile vs Desktop
+        function setDeviceView(mode) {
+            const container = document.getElementById('deviceContainer');
+            const deskBtn = document.getElementById('toggleDesktopBtn');
+            const mobBtn = document.getElementById('toggleMobileBtn');
+
+            if (mode === 'mobile') {
+                container.classList.add('mobile-preview-frame');
+                mobBtn.className = 'px-3.5 py-1.5 rounded-full text-xs font-bold transition-all text-gold bg-gold/20 flex items-center gap-2';
+                deskBtn.className = 'px-3.5 py-1.5 rounded-full text-xs font-bold transition-all text-stone-400 hover:text-gold flex items-center gap-2';
+            } else {
+                container.classList.remove('mobile-preview-frame');
+                deskBtn.className = 'px-3.5 py-1.5 rounded-full text-xs font-bold transition-all text-gold bg-gold/20 flex items-center gap-2';
+                mobBtn.className = 'px-3.5 py-1.5 rounded-full text-xs font-bold transition-all text-stone-400 hover:text-gold flex items-center gap-2';
+            }
+
+            // Redimensionar Canvas de Three.js al cambiar el tamaño del marco de manera fluida
+            setTimeout(() => {
+                window.dispatchEvent(new Event('resize'));
+            }, 100);
+            setTimeout(() => {
+                window.dispatchEvent(new Event('resize'));
+            }, 550);
+        }
+
+        // Función Global para Encargar vía WhatsApp con el formato predeterminado
+        function encargarProducto(modelo, precio) {
+            const mensaje = `Buenas! Hola Lexus! Quisiera encargar el siguiente mueble artesanal:\n• *Modelo:* ${modelo}\n• *Acabado:* Roble Natural\n• *Cantidad:* 1 unidad(es)\n• *Total Estimado:* ${precio}\n\nMuchas gracias!`;
+            const encoded = encodeURIComponent(mensaje);
+            window.open(`https://wa.me/5492634785174?text=${encoded}`, '_blank');
+        }
+
+        // Background Dynamic Wine Particles
+        (function initBgParticles() {
+            const canvas = document.getElementById('bgParticles');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            const particles = [];
+            const particleCount = 45;
+            const colors = ['#D4AF37', '#801F37', '#5C1224', '#2D5A3F'];
+
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 2 + 1,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    vx: (Math.random() - 0.5) * 0.4,
+                    vy: -Math.random() * 0.6 - 0.2,
+                    alpha: Math.random() * 0.5 + 0.2
+                });
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+
+                    if(p.y < -10) p.y = canvas.height + 10;
+                    if(p.x < 0) p.x = canvas.width;
+                    if(p.x > canvas.width) p.x = 0;
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color;
+                    ctx.globalAlpha = p.alpha;
+                    ctx.fill();
+                });
+                ctx.globalAlpha = 1.0;
+                requestAnimationFrame(animate);
+            }
+            animate();
+        })();
+
+        // THREE.JS - MODELADO EXACTO A LA IMAGEN DE CARPETA DE CAMPO
+        window.addEventListener('load', function() {
+
+            // Materiales Compartidos
+            const woodMaterial = new THREE.MeshStandardMaterial({
+                color: 0xC18F53, // Tono roble natural claro como en la foto
+                roughness: 0.7,
+                metalness: 0.05
+            });
+
+            const bottleMaterial = new THREE.MeshPhysicalMaterial({
+                color: 0x1A4023, // Vidrio verde oscuro
+                roughness: 0.15,
+                transmission: 0.5,
+                thickness: 0.4,
+                transparent: true
+            });
+
+            const capMat = new THREE.MeshStandardMaterial({
+                color: 0x990000,
+                roughness: 0.3
+            });
+
+            const glassMaterial = new THREE.MeshPhysicalMaterial({
+                color: 0xFFFFFF,
+                roughness: 0.1,
+                transmission: 0.85,
+                thickness: 0.2,
+                transparent: true,
+                opacity: 0.75
+            });
+
+            // Función para Generar Botella de Vino Estándar
+            function createWineBottle() {
+                const bottleGroup = new THREE.Group();
+
+                // Cuerpo
+                const bodyGeo = new THREE.CylinderGeometry(0.13, 0.13, 0.75, 24);
+                const body = new THREE.Mesh(bodyGeo, bottleMaterial);
+                body.castShadow = true;
+                bottleGroup.add(body);
+
+                // Cuello
+                const neckGeo = new THREE.CylinderGeometry(0.04, 0.11, 0.3, 24);
+                const neck = new THREE.Mesh(neckGeo, bottleMaterial);
+                neck.position.y = 0.525;
+                bottleGroup.add(neck);
+
+                // Cápsula/Tapa roja
+                const capGeo = new THREE.CylinderGeometry(0.043, 0.043, 0.12, 24);
+                const cap = new THREE.Mesh(capGeo, capMat);
+                cap.position.y = 0.71;
+                bottleGroup.add(cap);
+
+                return bottleGroup;
+            }
+
+            // Función para Generar Vaso de Vidrio
+            function createGlass() {
+                const glassGroup = new THREE.Group();
+                const glassGeo = new THREE.CylinderGeometry(0.15, 0.11, 0.35, 16);
+                const glassMesh = new THREE.Mesh(glassGeo, glassMaterial);
+                glassGroup.add(glassMesh);
+                return glassGroup;
+            }
+
+            // --- MODELO 1: VINOTECA GRANDE (4 Tablas + 2 Botellas Inclinadas) ---
+            (function initVinotecaGrande() {
+                const container = document.getElementById('canvas-container-1');
+                if (!container) return;
+
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+                camera.position.set(0, 0, 5.8);
+
+                const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                renderer.setSize(container.clientWidth, container.clientHeight);
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                container.appendChild(renderer.domElement);
+
+                const controls = new THREE.OrbitControls(camera, renderer.domElement);
+                controls.enableDamping = true;
+                controls.autoRotate = true;
+                controls.autoRotateSpeed = 1.5;
+
+                // Luces
+                const ambientLight = new THREE.AmbientLight(0xffeedd, 0.9);
+                scene.add(ambientLight);
+                const dirLight = new THREE.DirectionalLight(0xfff5ea, 1.4);
+                dirLight.position.set(5, 5, 5);
+                scene.add(dirLight);
+
+                const group = new THREE.Group();
+
+                // 1. Estructura Trasera: 4 listones verticales de madera (planks)
+                const plankWidth = 0.52;
+                const plankHeight = 3.8;
+                const plankDepth = 0.08;
+                const plankGap = 0.02;
+                const totalWidth = 4 * plankWidth + 3 * plankGap;
+
+                const nailMat = new THREE.MeshStandardMaterial({ color: 0x333333, metalness: 0.8, roughness: 0.3 });
+
+                for (let i = 0; i < 4; i++) {
+                    const x = -totalWidth / 2 + plankWidth / 2 + i * (plankWidth + plankGap);
+                    const plankGeo = new THREE.BoxGeometry(plankWidth, plankHeight, plankDepth);
+                    const plank = new THREE.Mesh(plankGeo, woodMaterial);
+                    plank.position.set(x, 0, 0);
+                    plank.castShadow = true;
+                    plank.receiveShadow = true;
+                    group.add(plank);
+
+                    // Clavos detallados (arriba y abajo)
+                    const nailGeo = new THREE.CylinderGeometry(0.018, 0.018, 0.02, 8);
+                    const topNail = new THREE.Mesh(nailGeo, nailMat);
+                    topNail.rotation.x = Math.PI / 2;
+                    topNail.position.set(x, plankHeight / 2 - 0.25, plankDepth / 2 + 0.005);
+                    group.add(topNail);
+
+                    const bottomNail = new THREE.Mesh(nailGeo, nailMat);
+                    bottomNail.rotation.x = Math.PI / 2;
+                    bottomNail.position.set(x, -plankHeight / 2 + 0.25, plankDepth / 2 + 0.005);
+                    group.add(bottomNail);
+                }
+
+                // Función para construir una repisa inclinada con botella y tope
+                function createShelf(yPos) {
+                    const shelfGroup = new THREE.Group();
+
+                    const shelfWidth = 2.1;
+                    const shelfHeight = 0.09;
+                    const shelfDepth = 0.28;
+
+                    const shelfGeo = new THREE.BoxGeometry(shelfWidth, shelfHeight, shelfDepth);
+                    const shelf = new THREE.Mesh(shelfGeo, woodMaterial);
+                    shelf.castShadow = true;
+                    shelf.receiveShadow = true;
+                    shelfGroup.add(shelf);
+
+                    // Tope vertical en el extremo inferior
+                    const stopperGeo = new THREE.BoxGeometry(0.09, 0.28, 0.28);
+                    const stopper = new THREE.Mesh(stopperGeo, woodMaterial);
+                    stopper.position.set(shelfWidth / 2 - 0.045, 0.12, 0);
+                    stopper.castShadow = true;
+                    shelfGroup.add(stopper);
+
+                    // Botella acostada sobre la repisa
+                    const bottle = createWineBottle();
+                    bottle.rotation.z = -Math.PI / 2;
+                    bottle.position.set(-0.1, shelfHeight / 2 + 0.14, 0);
+                    shelfGroup.add(bottle);
+
+                    // Posicionamiento de la repisa separada del panel trasero para que no intersecte
+                    shelfGroup.position.set(0, yPos, plankDepth / 2 + shelfDepth / 2 + 0.02);
+
+                    // Inclinación diagonal exacta
+                    shelfGroup.rotation.z = -0.28;
+
+                    return shelfGroup;
+                }
+
+                const shelf1 = createShelf(0.65);
+                const shelf2 = createShelf(-0.65);
+                group.add(shelf1);
+                group.add(shelf2);
+
+                scene.add(group);
+
+                function resizeView() {
+                    const width = container.clientWidth;
+                    const height = container.clientHeight;
+                    if (width === 0 || height === 0) return;
+                    camera.aspect = width / height;
+                    // Ajuste de zoom de la cámara en pantallas angostas
+                    if (width < 380) {
+                        camera.position.z = 6.8;
+                    } else {
+                        camera.position.z = 5.8;
+                    }
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(width, height);
+                }
+
+                function animate() {
+                    requestAnimationFrame(animate);
+                    controls.update();
+                    renderer.render(scene, camera);
+                }
+                animate();
+
+                window.addEventListener('resize', resizeView);
+                resizeView();
+            })();
+
+            // --- MODELO 2: VINOTECA CON COPERO (4 Botellas + 3 Vasos) ---
+            (function initVinotecaCopero() {
+                const container = document.getElementById('canvas-container-2');
+                if (!container) return;
+
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+                camera.position.set(0, 0, 7.5);
+
+                const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                renderer.setSize(container.clientWidth, container.clientHeight);
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                container.appendChild(renderer.domElement);
+
+                const controls = new THREE.OrbitControls(camera, renderer.domElement);
+                controls.enableDamping = true;
+                controls.autoRotate = true;
+                controls.autoRotateSpeed = 1.8;
+
+                // Luces
+                const ambientLight = new THREE.AmbientLight(0xffeedd, 0.9);
+                scene.add(ambientLight);
+                const dirLight = new THREE.DirectionalLight(0xfff5ea, 1.4);
+                dirLight.position.set(5, 5, 5);
+                scene.add(dirLight);
+
+                const group2 = new THREE.Group();
+
+                // Marco Cuadrado
+                const frameThickness = 0.2;
+                const outerWidth = 3.8;
+                const outerHeight = 3.6;
+                const depth = 0.8;
+
+                const topFrame = new THREE.Mesh(new THREE.BoxGeometry(outerWidth, frameThickness, depth), woodMaterial);
+                topFrame.position.y = outerHeight / 2;
+                const botFrame = new THREE.Mesh(new THREE.BoxGeometry(outerWidth, frameThickness, depth), woodMaterial);
+                botFrame.position.y = -outerHeight / 2;
+                group2.add(topFrame);
+                group2.add(botFrame);
+
+                const leftFrame = new THREE.Mesh(new THREE.BoxGeometry(frameThickness, outerHeight, depth), woodMaterial);
+                leftFrame.position.x = -outerWidth / 2;
+                const rightFrame = new THREE.Mesh(new THREE.BoxGeometry(frameThickness, outerHeight, depth), woodMaterial);
+                rightFrame.position.x = outerWidth / 2;
+                group2.add(leftFrame);
+                group2.add(rightFrame);
+
+                // Divisor Vertical
+                const dividerVert = new THREE.Mesh(new THREE.BoxGeometry(frameThickness, outerHeight, depth), woodMaterial);
+                dividerVert.position.x = 0.7;
+                group2.add(dividerVert);
+
+                // SECCIÓN DERECHA: 3 Estantes con 3 Vasos
+                const shelfRightGeo = new THREE.BoxGeometry(1.1, frameThickness, depth);
+                const shelfR1 = new THREE.Mesh(shelfRightGeo, woodMaterial);
+                shelfR1.position.set(1.25, 0.6, 0);
+                const shelfR2 = new THREE.Mesh(shelfRightGeo, woodMaterial);
+                shelfR2.position.set(1.25, -0.6, 0);
+                group2.add(shelfR1);
+                group2.add(shelfR2);
+
+                const g1 = createGlass();
+                g1.position.set(1.25, 1.1, 0);
+                group2.add(g1);
+
+                const g2 = createGlass();
+                g2.position.set(1.25, -0.1, 0);
+                group2.add(g2);
+
+                const g3 = createGlass();
+                g3.position.set(1.25, -1.3, 0);
+                group2.add(g3);
+
+                // SECCIÓN IZQUIERDA: Madera a la mitad
+                const shelfLeftGeo = new THREE.BoxGeometry(2.3, frameThickness, depth);
+                const shelfLeft = new THREE.Mesh(shelfLeftGeo, woodMaterial);
+                shelfLeft.position.set(-0.55, 0, 0);
+                group2.add(shelfLeft);
+
+                // 4 Botellas Verticales con proporciones reales de vino
+                const b1 = createWineBottle();
+                b1.scale.set(0.85, 0.85, 0.85);
+                b1.position.set(-1.1, -1.15, 0);
+                group2.add(b1);
+
+                const b2 = createWineBottle();
+                b2.scale.set(0.85, 0.85, 0.85);
+                b2.position.set(-0.2, -1.15, 0);
+                group2.add(b2);
+
+                const b3 = createWineBottle();
+                b3.scale.set(0.85, 0.85, 0.85);
+                b3.position.set(-1.1, 0.5, 0);
+                group2.add(b3);
+
+                const b4 = createWineBottle();
+                b4.scale.set(0.85, 0.85, 0.85);
+                b4.position.set(-0.2, 0.5, 0);
+                group2.add(b4);
+
+                scene.add(group2);
+
+                function resizeView() {
+                    const width = container.clientWidth;
+                    const height = container.clientHeight;
+                    if (width === 0 || height === 0) return;
+                    camera.aspect = width / height;
+                    // Ajuste de zoom de la cámara en pantallas angostas
+                    if (width < 380) {
+                        camera.position.z = 8.5;
+                    } else {
+                        camera.position.z = 7.5;
+                    }
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(width, height);
+                }
+
+                function animate() {
+                    requestAnimationFrame(animate);
+                    controls.update();
+                    renderer.render(scene, camera);
+                }
+                animate();
+
+                window.addEventListener('resize', resizeView);
+                resizeView();
+            })();
+
+        });
+    </script>
+</body>
+</html>
