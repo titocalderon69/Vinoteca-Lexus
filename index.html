@@ -605,59 +605,137 @@
                 metalness: 0.05
             });
 
+            // Vidrio de botella: verde oscuro, brillante y semitransparente
             const bottleMaterial = new THREE.MeshPhysicalMaterial({
-                color: 0x1A4023, // Vidrio verde oscuro
-                roughness: 0.15,
-                transmission: 0.5,
-                thickness: 0.4,
-                transparent: true
+                color: 0x1E4A2A,
+                roughness: 0.05,
+                metalness: 0.0,
+                clearcoat: 1.0,
+                clearcoatRoughness: 0.03,
+                transmission: 0.35,
+                transparent: true,
+                opacity: 0.88,
+                side: THREE.DoubleSide
             });
 
+            // Vino tinto dentro de la botella
+            const wineMaterial = new THREE.MeshStandardMaterial({
+                color: 0x3A0510,
+                roughness: 0.25,
+                metalness: 0.0
+            });
+
+            // Cápsula metalizada bordó
             const capMat = new THREE.MeshStandardMaterial({
-                color: 0x990000,
-                roughness: 0.3
+                color: 0x7A0E1E,
+                roughness: 0.25,
+                metalness: 0.75
             });
 
+            // Copa de cristal
             const glassMaterial = new THREE.MeshPhysicalMaterial({
                 color: 0xFFFFFF,
-                roughness: 0.1,
-                transmission: 0.85,
-                thickness: 0.2,
+                roughness: 0.02,
+                clearcoat: 1.0,
+                clearcoatRoughness: 0.02,
+                transmission: 0.9,
                 transparent: true,
-                opacity: 0.75
+                opacity: 0.45,
+                side: THREE.DoubleSide
             });
 
-            // Función para Generar Botella de Vino Estándar
+            // Etiqueta "LEXUS" dibujada en un canvas
+            function createLabelTexture() {
+                const c = document.createElement('canvas');
+                c.width = 512; c.height = 256;
+                const g = c.getContext('2d');
+                g.fillStyle = '#F3E9D2'; g.fillRect(0, 0, 512, 256);
+                g.strokeStyle = '#B8893B'; g.lineWidth = 6; g.strokeRect(150, 18, 212, 220);
+                g.fillStyle = '#5A0F1C';
+                g.textAlign = 'center';
+                g.font = 'bold 54px Georgia, serif';
+                g.fillText('LEXUS', 256, 112);
+                g.font = 'italic 22px Georgia, serif';
+                g.fillStyle = '#3B3B3B';
+                g.fillText('Malbec · Mendoza', 256, 156);
+                g.fillStyle = '#B8893B'; g.fillRect(200, 180, 112, 3);
+                g.font = '18px Georgia, serif'; g.fillStyle = '#5A0F1C';
+                g.fillText('2026', 256, 212);
+                const t = new THREE.CanvasTexture(c);
+                t.anisotropy = 8;
+                return t;
+            }
+            const labelMaterial = new THREE.MeshStandardMaterial({
+                map: createLabelTexture(),
+                roughness: 0.6,
+                metalness: 0.0
+            });
+
+            // Perfil de botella tipo Bordelesa (mismo alto y origen que antes: y de -0.375 a 0.77)
+            const BOTTLE_PROFILE = [
+                [0.000, -0.330], [0.040, -0.335], [0.070, -0.350], // fondo con "picada"
+                [0.110, -0.372], [0.128, -0.370], [0.132, -0.350],
+                [0.132,  0.240], [0.128,  0.300], [0.112,  0.360], // hombro
+                [0.080,  0.410], [0.052,  0.450], [0.043,  0.500], // cuello
+                [0.041,  0.700], [0.046,  0.735], [0.046,  0.770], // pico
+                [0.034,  0.770], [0.034,  0.740]
+            ];
+
+            function latheFrom(points, scale, segs) {
+                const v = points.map(p => new THREE.Vector2(p[0] * scale, p[1]));
+                return new THREE.LatheGeometry(v, segs || 48);
+            }
+
+            // Función para Generar Botella de Vino (vidrio + vino + etiqueta + cápsula)
             function createWineBottle() {
                 const bottleGroup = new THREE.Group();
 
-                // Cuerpo
-                const bodyGeo = new THREE.CylinderGeometry(0.13, 0.13, 0.75, 24);
-                const body = new THREE.Mesh(bodyGeo, bottleMaterial);
-                body.castShadow = true;
-                bottleGroup.add(body);
+                // Vidrio
+                const glass = new THREE.Mesh(latheFrom(BOTTLE_PROFILE, 1, 64), bottleMaterial);
+                glass.castShadow = true;
+                glass.renderOrder = 2;
+                bottleGroup.add(glass);
 
-                // Cuello
-                const neckGeo = new THREE.CylinderGeometry(0.04, 0.11, 0.3, 24);
-                const neck = new THREE.Mesh(neckGeo, bottleMaterial);
-                neck.position.y = 0.525;
-                bottleGroup.add(neck);
+                // Vino (un poco más chico que el vidrio, lleno hasta el hombro)
+                const wineProfile = [
+                    [0.000, -0.320], [0.060, -0.330], [0.118, -0.355],
+                    [0.124, -0.340], [0.124, 0.250], [0.000, 0.250]
+                ];
+                const wine = new THREE.Mesh(latheFrom(wineProfile, 1, 48), wineMaterial);
+                wine.renderOrder = 1;
+                bottleGroup.add(wine);
 
-                // Cápsula/Tapa roja
-                const capGeo = new THREE.CylinderGeometry(0.043, 0.043, 0.12, 24);
-                const cap = new THREE.Mesh(capGeo, capMat);
-                cap.position.y = 0.71;
+                // Etiqueta frontal
+                const labelGeo = new THREE.CylinderGeometry(0.1335, 0.1335, 0.30, 64, 1, true, -Math.PI * 0.55, Math.PI * 1.1);
+                const label = new THREE.Mesh(labelGeo, labelMaterial);
+                label.position.y = -0.02;
+                label.renderOrder = 3;
+                bottleGroup.add(label);
+
+                // Cápsula metalizada que cubre el pico
+                const capProfile = [
+                    [0.000, 0.785], [0.049, 0.785], [0.050, 0.770],
+                    [0.048, 0.735], [0.045, 0.640], [0.047, 0.630]
+                ];
+                const cap = new THREE.Mesh(latheFrom(capProfile, 1, 48), capMat);
+                cap.castShadow = true;
                 bottleGroup.add(cap);
 
                 return bottleGroup;
             }
 
-            // Función para Generar Vaso de Vidrio
+            // Función para Generar Copa de Cristal (mismo alto que el vaso anterior, y de -0.175 a 0.175)
             function createGlass() {
                 const glassGroup = new THREE.Group();
-                const glassGeo = new THREE.CylinderGeometry(0.15, 0.11, 0.35, 16);
-                const glassMesh = new THREE.Mesh(glassGeo, glassMaterial);
-                glassGroup.add(glassMesh);
+                const copaProfile = [
+                    [0.000, -0.175], [0.090, -0.175], [0.092, -0.168], // pie
+                    [0.020, -0.160], [0.012, -0.140], [0.010, -0.040], // tallo
+                    [0.030, -0.020], [0.085, 0.010], [0.115, 0.070],   // cáliz
+                    [0.120, 0.130], [0.108, 0.175]
+                ];
+                const copa = new THREE.Mesh(latheFrom(copaProfile, 1, 48), glassMaterial);
+                copa.renderOrder = 4;
+                glassGroup.add(copa);
                 return glassGroup;
             }
 
@@ -686,6 +764,10 @@
                 const dirLight = new THREE.DirectionalLight(0xfff5ea, 1.4);
                 dirLight.position.set(5, 5, 5);
                 scene.add(dirLight);
+                // Luz de contra para brillos en el vidrio
+                const rimLight = new THREE.PointLight(0xffffff, 0.9, 20);
+                rimLight.position.set(-3, 2.5, 3);
+                scene.add(rimLight);
 
                 const group = new THREE.Group();
 
@@ -814,6 +896,10 @@
                 const dirLight = new THREE.DirectionalLight(0xfff5ea, 1.4);
                 dirLight.position.set(5, 5, 5);
                 scene.add(dirLight);
+                // Luz de contra para brillos en el vidrio
+                const rimLight = new THREE.PointLight(0xffffff, 0.9, 20);
+                rimLight.position.set(-3, 2.5, 3);
+                scene.add(rimLight);
 
                 const group2 = new THREE.Group();
 
