@@ -294,7 +294,7 @@
                     </div>
                 </div>
 
-                <!-- MODELO 2: Vinoteca con Copero (4 Botellas + 3 Vasos) -->
+                <!-- MODELO 2: Vinoteca con Copero (2 Botellas + 3 Vasos) -->
                 <div class="glass-card glass-card-hover rounded-3xl overflow-hidden flex flex-col justify-between">
                     <div class="p-6 bg-wineDeep/80 border-b border-gold/20 text-white relative">
                         <div class="flex justify-between items-center mb-2">
@@ -302,7 +302,7 @@
                             <span class="text-xs text-gold/80"><i class="fa-solid fa-rotate mr-1"></i> Interactivo 360°</span>
                         </div>
                         <h3 class="font-cinzel text-2xl font-bold text-gold">Vinoteca con Copero</h3>
-                        <p class="text-xs text-stone-300">Marco robusto con división a la mitad para 4 botellas y 3 vasos/copas.</p>
+                        <p class="text-xs text-stone-300">Marco robusto con división a la mitad para 2 botellas y 3 vasos/copas.</p>
                     </div>
 
                     <!-- Visualizador Three.js -->
@@ -311,7 +311,7 @@
                             <i class="fa-solid fa-hand-pointer text-gold mr-1"></i> Arrastra para rotar en 3D
                         </div>
                         <div class="absolute bottom-3 right-3 z-10 bg-gold text-wineDeep font-bold text-xs px-3.5 py-1 rounded-full shadow-lg pointer-events-none">
-                            Capacidad: 4 Botellas y 3 Vasos
+                            Capacidad: 2 Botellas y 3 Vasos
                         </div>
                     </div>
 
@@ -321,7 +321,7 @@
                             <h4 class="font-bold text-gold text-sm">Detalles Técnicos:</h4>
                             <ul class="text-xs text-stone-300 space-y-2">
                                 <li class="flex items-center"><i class="fa-solid fa-check text-gold mr-2"></i> **Marco rectangular completo** en madera barnizada.</li>
-                                <li class="flex items-center"><i class="fa-solid fa-check text-gold mr-2"></i> **Estante a la mitad a la izquierda** con lugar para **4 botellas** (2 abajo y 2 arriba).</li>
+                                <li class="flex items-center"><i class="fa-solid fa-check text-gold mr-2"></i> **Estante a la mitad a la izquierda** con lugar para **2 botellas** (1 abajo y 1 arriba).</li>
                                 <li class="flex items-center"><i class="fa-solid fa-check text-gold mr-2"></i> **Sección lateral con 3 compartimentos** para alojar **3 vasos** de vidrio.</li>
                             </ul>
                         </div>
@@ -331,7 +331,7 @@
                                 <span class="text-[11px] text-stone-400 block uppercase font-bold">Precio Especial</span>
                                 <span class="font-cinzel text-3xl font-bold text-gold">$9.000</span>
                             </div>
-                            <button onclick="encargarProducto('Vinoteca con Copero (4 Botellas y 3 Vasos)', '$9.000')" class="bg-ecoGreen hover:bg-ecoGreenLight text-white px-6 py-3.5 rounded-full font-bold text-xs tracking-wider transition-all shadow-lg flex items-center gap-2 border border-white/20">
+                            <button onclick="encargarProducto('Vinoteca con Copero (2 Botellas y 3 Vasos)', '$9.000')" class="bg-ecoGreen hover:bg-ecoGreenLight text-white px-6 py-3.5 rounded-full font-bold text-xs tracking-wider transition-all shadow-lg flex items-center gap-2 border border-white/20">
                                 <i class="fa-brands fa-whatsapp text-lg"></i> ENCARGAR AHORA
                             </button>
                         </div>
@@ -994,7 +994,7 @@
                 resizeView();
             })();
 
-            // --- MODELO 2: VINOTECA CON COPERO (4 Botellas + 3 Vasos) ---
+            // --- MODELO 2: VINOTECA CON COPERO (2 Botellas + 3 Vasos) ---
             (function initVinotecaCopero() {
                 const container = document.getElementById('canvas-container-2');
                 if (!container) return;
@@ -1078,26 +1078,17 @@
                 shelfLeft.position.set(-0.55, 0, 0);
                 group2.add(shelfLeft);
 
-                // 4 Botellas Verticales con proporciones reales de vino
+                // 2 Botellas Verticales (1 arriba y 1 abajo)
                 const b1 = createWineBottle();
                 b1.scale.set(0.85, 0.85, 0.85);
-                b1.position.set(-1.1, -1.15, 0);
+                b1.position.set(-0.55, -1.15, 0);
                 group2.add(b1);
-
-                const b2 = createWineBottle();
-                b2.scale.set(0.85, 0.85, 0.85);
-                b2.position.set(-0.2, -1.15, 0);
-                group2.add(b2);
 
                 const b3 = createWineBottle();
                 b3.scale.set(0.85, 0.85, 0.85);
-                b3.position.set(-1.1, 0.5, 0);
+                b3.position.set(-0.55, 0.5, 0);
                 group2.add(b3);
 
-                const b4 = createWineBottle();
-                b4.scale.set(0.85, 0.85, 0.85);
-                b4.position.set(-0.2, 0.5, 0);
-                group2.add(b4);
 
                 scene.add(group2);
 
