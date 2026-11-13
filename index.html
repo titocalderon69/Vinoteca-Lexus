@@ -152,6 +152,7 @@
                 <a href="#catalogo" class="hover:text-gold transition-colors flex items-center gap-2 text-stone-300"><i class="fa-solid fa-wine-bottle text-xs text-gold"></i> Catálogo 360°</a>
                 <a href="#nosotros" class="hover:text-gold transition-colors flex items-center gap-2 text-stone-300"><i class="fa-solid fa-users text-xs text-gold"></i> Nosotros</a>
                 <a href="#video" class="hover:text-gold transition-colors flex items-center gap-2 text-stone-300"><i class="fa-solid fa-play text-xs text-gold"></i> Video</a>
+                <a href="#informe" class="hover:text-gold transition-colors flex items-center gap-2 text-stone-300"><i class="fa-solid fa-book-open text-xs text-gold"></i> Informe</a>
                 <a href="#contacto" class="hover:text-gold transition-colors flex items-center gap-2 text-stone-300"><i class="fa-solid fa-envelope text-xs text-gold"></i> Contacto</a>
             </div>
 
@@ -458,6 +459,57 @@
         </div>
     </section>
 
+
+    <!-- Sección Informe (Carpeta de Campo) -->
+    <section id="informe" class="py-24 relative z-10 border-t border-gold/20 bg-wineDeep/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center space-y-4 mb-14">
+                <span class="text-gold font-bold text-xs tracking-widest uppercase bg-gold/10 px-4 py-1.5 rounded-full border border-gold/30">Coloquio 2026 · 5° 2ª</span>
+                <h2 class="font-cinzel text-3xl sm:text-5xl font-extrabold gold-gradient-text">Informe del Proyecto</h2>
+                <p class="text-sm text-stone-400 max-w-2xl mx-auto">La Carpeta de Campo completa de Lexus: investigación, producción, encuesta, monotributo, contabilidad y anexos. Tocá un capítulo para ir directo a esa página.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+                <!-- Portada -->
+                <div class="lg:col-span-4 flex flex-col items-center">
+                    <button onclick="abrirInforme(1)" class="relative group w-64 sm:w-72" aria-label="Abrir informe">
+                        <div class="absolute inset-0 translate-x-3 translate-y-3 rounded-xl bg-gold/20 border border-gold/20"></div>
+                        <div class="absolute inset-0 translate-x-1.5 translate-y-1.5 rounded-xl bg-stone-200/10 border border-gold/20"></div>
+                        <img src="informe/p-01.jpg" alt="Portada de la Carpeta de Campo de Lexus" class="relative rounded-xl border border-gold/40 shadow-2xl group-hover:-translate-y-1 transition-transform w-full">
+                        <span class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-wineDeep/90 text-gold text-[11px] font-bold tracking-wider px-4 py-2 rounded-full border border-gold/40 opacity-90 group-hover:opacity-100 flex items-center gap-2 whitespace-nowrap"><i class="fa-solid fa-expand"></i> VER INFORME</span>
+                    </button>
+                    <p class="text-[11px] text-stone-500 mt-6 text-center">Thiago Roldán · Diego Páez · Julieta Galdame · Matías Chaves<br>Escuela José Manuel Estrada N° 4-089 · 21 páginas</p>
+                    <div class="flex flex-wrap justify-center gap-3 mt-5">
+                        <button onclick="abrirInforme(1)" class="bg-gold hover:bg-goldLight text-wineDeep px-5 py-3 rounded-full font-bold text-xs tracking-wider shadow-lg flex items-center gap-2"><i class="fa-solid fa-book-open"></i> LEER AQUÍ</button>
+                        <a href="informe/Lexus_Carpeta_de_Campo.pdf" download class="border border-gold/50 text-gold hover:bg-gold hover:text-wineDeep px-5 py-3 rounded-full font-bold text-xs tracking-wider flex items-center gap-2 transition-all"><i class="fa-solid fa-file-arrow-down"></i> DESCARGAR PDF</a>
+                    </div>
+                </div>
+
+                <!-- Índice -->
+                <div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-3 gap-5">
+                        <div class="glass-card rounded-2xl p-5 space-y-2">
+                            <h3 class="font-cinzel text-gold font-bold text-sm flex items-center gap-2 mb-2"><i class="fa-solid fa-magnifying-glass text-xs"></i> Primera etapa · Investigación</h3>
+                            <button onclick="abrirInforme(3)" class="w-full flex items-center justify-between gap-3 py-2 px-3 rounded-lg hover:bg-gold/10 transition-colors text-left group"><span class="text-xs text-stone-300 group-hover:text-goldLight"><span class="text-gold font-bold mr-2">01</span>Resumen e identidad</span><span class="text-[10px] text-stone-500 group-hover:text-gold shrink-0">pág. 3</span></button><button onclick="abrirInforme(3)" class="w-full flex items-center justify-between gap-3 py-2 px-3 rounded-lg hover:bg-gold/10 transition-colors text-left group"><span class="text-xs text-stone-300 group-hover:text-goldLight"><span class="text-gold font-bold mr-2">02</span>Ubicación y plano</span><span class="text-[10px] text-stone-500 group-hover:text-gold shrink-0">pág. 3</span></button><button onclick="abrirInforme(4)" class="w-full flex items-center justify-between gap-3 py-2 px-3 rounded-lg hover:bg-gold/10 transition-colors text-left group"><span class="text-xs text-stone-300 group-hover:text-goldLight"><span class="text-gold font-bold mr-2">03</span>FODA y organigrama</span><span class="text-[10px] text-stone-500 group-hover:text-gold shrink-0">pág. 4</span></button><button onclick="abrirInforme(5)" class="w-full flex items-center justify-between gap-3 py-2 px-3 rounded-lg hover:bg-gold/10 transition-colors text-left group"><span class="text-xs text-stone-300 group-hover:text-goldLight"><span class="text-gold font-bold mr-2">04</span>Producto y materia prima</span><span class="text-[10px] text-stone-500 group-hover:text-gold shrink-0">pág. 5</span></button>
+                        </div>
+                        <div class="glass-card rounded-2xl p-5 space-y-2">
+                            <h3 class="font-cinzel text-gold font-bold text-sm flex items-center gap-2 mb-2"><i class="fa-solid fa-hammer text-xs"></i> Segunda etapa · Producción</h3>
+                            <button onclick="abrirInforme(5)" class="w-full flex items-center justify-between gap-3 py-2 px-3 rounded-lg hover:bg-gold/10 transition-colors text-left group"><span class="text-xs text-stone-300 group-hover:text-goldLight"><span class="text-gold font-bold mr-2">05</span>Producción</span><span class="text-[10px] text-stone-500 group-hover:text-gold shrink-0">pág. 5</span></button><button onclick="abrirInforme(6)" class="w-full flex items-center justify-between gap-3 py-2 px-3 rounded-lg hover:bg-gold/10 transition-colors text-left group"><span class="text-xs text-stone-300 group-hover:text-goldLight"><span class="text-gold font-bold mr-2">06</span>Packaging y etiquetas</span><span class="text-[10px] text-stone-500 group-hover:text-gold shrink-0">pág. 6</span></button><button onclick="abrirInforme(7)" class="w-full flex items-center justify-between gap-3 py-2 px-3 rounded-lg hover:bg-gold/10 transition-colors text-left group"><span class="text-xs text-stone-300 group-hover:text-goldLight"><span class="text-gold font-bold mr-2">07</span>Comercialización y flyer</span><span class="text-[10px] text-stone-500 group-hover:text-gold shrink-0">pág. 7</span></button><button onclick="abrirInforme(9)" class="w-full flex items-center justify-between gap-3 py-2 px-3 rounded-lg hover:bg-gold/10 transition-colors text-left group"><span class="text-xs text-stone-300 group-hover:text-goldLight"><span class="text-gold font-bold mr-2">08</span>Encuesta y precios</span><span class="text-[10px] text-stone-500 group-hover:text-gold shrink-0">pág. 9</span></button><button onclick="abrirInforme(12)" class="w-full flex items-center justify-between gap-3 py-2 px-3 rounded-lg hover:bg-gold/10 transition-colors text-left group"><span class="text-xs text-stone-300 group-hover:text-goldLight"><span class="text-gold font-bold mr-2">09</span>Monotributo y cierre</span><span class="text-[10px] text-stone-500 group-hover:text-gold shrink-0">pág. 12</span></button>
+                        </div>
+                        <div class="glass-card rounded-2xl p-5 space-y-2">
+                            <h3 class="font-cinzel text-gold font-bold text-sm flex items-center gap-2 mb-2"><i class="fa-solid fa-folder-open text-xs"></i> Documentación y anexos</h3>
+                            <button onclick="abrirInforme(14)" class="w-full flex items-center justify-between gap-3 py-2 px-3 rounded-lg hover:bg-gold/10 transition-colors text-left group"><span class="text-xs text-stone-300 group-hover:text-goldLight"><span class="text-gold font-bold mr-2">A</span>Sistema de información contable</span><span class="text-[10px] text-stone-500 group-hover:text-gold shrink-0">pág. 14</span></button><button onclick="abrirInforme(18)" class="w-full flex items-center justify-between gap-3 py-2 px-3 rounded-lg hover:bg-gold/10 transition-colors text-left group"><span class="text-xs text-stone-300 group-hover:text-goldLight"><span class="text-gold font-bold mr-2">B</span>Formación Ética y Ciudadana</span><span class="text-[10px] text-stone-500 group-hover:text-gold shrink-0">pág. 18</span></button><button onclick="abrirInforme(19)" class="w-full flex items-center justify-between gap-3 py-2 px-3 rounded-lg hover:bg-gold/10 transition-colors text-left group"><span class="text-xs text-stone-300 group-hover:text-goldLight"><span class="text-gold font-bold mr-2">C</span>Inglés · Video del proyecto</span><span class="text-[10px] text-stone-500 group-hover:text-gold shrink-0">pág. 19</span></button><button onclick="abrirInforme(20)" class="w-full flex items-center justify-between gap-3 py-2 px-3 rounded-lg hover:bg-gold/10 transition-colors text-left group"><span class="text-xs text-stone-300 group-hover:text-goldLight"><span class="text-gold font-bold mr-2">D</span>Mapeo colectivo</span><span class="text-[10px] text-stone-500 group-hover:text-gold shrink-0">pág. 20</span></button>
+                        </div>
+                </div>
+            </div>
+
+            <!-- Todas las páginas -->
+            <div class="mt-14">
+                <h3 class="font-cinzel text-gold font-bold text-sm mb-4 flex items-center gap-2"><i class="fa-solid fa-layer-group text-xs"></i> Todas las páginas</h3>
+                <div class="flex gap-4 overflow-x-auto snap-x pb-4"><button onclick="abrirInforme(1)" class="snap-start shrink-0 w-28 sm:w-32 group"><div class="rounded-lg overflow-hidden border border-gold/20 group-hover:border-gold shadow-lg transition-all group-hover:-translate-y-1"><img src="informe/p-01.jpg" alt="Página 1 del informe" loading="lazy" class="w-full block"></div><span class="block text-[10px] text-stone-500 group-hover:text-gold mt-1.5 text-center">1</span></button><button onclick="abrirInforme(2)" class="snap-start shrink-0 w-28 sm:w-32 group"><div class="rounded-lg overflow-hidden border border-gold/20 group-hover:border-gold shadow-lg transition-all group-hover:-translate-y-1"><img src="informe/p-02.jpg" alt="Página 2 del informe" loading="lazy" class="w-full block"></div><span class="block text-[10px] text-stone-500 group-hover:text-gold mt-1.5 text-center">2</span></button><button onclick="abrirInforme(3)" class="snap-start shrink-0 w-28 sm:w-32 group"><div class="rounded-lg overflow-hidden border border-gold/20 group-hover:border-gold shadow-lg transition-all group-hover:-translate-y-1"><img src="informe/p-03.jpg" alt="Página 3 del informe" loading="lazy" class="w-full block"></div><span class="block text-[10px] text-stone-500 group-hover:text-gold mt-1.5 text-center">3</span></button><button onclick="abrirInforme(4)" class="snap-start shrink-0 w-28 sm:w-32 group"><div class="rounded-lg overflow-hidden border border-gold/20 group-hover:border-gold shadow-lg transition-all group-hover:-translate-y-1"><img src="informe/p-04.jpg" alt="Página 4 del informe" loading="lazy" class="w-full block"></div><span class="block text-[10px] text-stone-500 group-hover:text-gold mt-1.5 text-center">4</span></button><button onclick="abrirInforme(5)" class="snap-start shrink-0 w-28 sm:w-32 group"><div class="rounded-lg overflow-hidden border border-gold/20 group-hover:border-gold shadow-lg transition-all group-hover:-translate-y-1"><img src="informe/p-05.jpg" alt="Página 5 del informe" loading="lazy" class="w-full block"></div><span class="block text-[10px] text-stone-500 group-hover:text-gold mt-1.5 text-center">5</span></button><button onclick="abrirInforme(6)" class="snap-start shrink-0 w-28 sm:w-32 group"><div class="rounded-lg overflow-hidden border border-gold/20 group-hover:border-gold shadow-lg transition-all group-hover:-translate-y-1"><img src="informe/p-06.jpg" alt="Página 6 del informe" loading="lazy" class="w-full block"></div><span class="block text-[10px] text-stone-500 group-hover:text-gold mt-1.5 text-center">6</span></button><button onclick="abrirInforme(7)" class="snap-start shrink-0 w-28 sm:w-32 group"><div class="rounded-lg overflow-hidden border border-gold/20 group-hover:border-gold shadow-lg transition-all group-hover:-translate-y-1"><img src="informe/p-07.jpg" alt="Página 7 del informe" loading="lazy" class="w-full block"></div><span class="block text-[10px] text-stone-500 group-hover:text-gold mt-1.5 text-center">7</span></button><button onclick="abrirInforme(8)" class="snap-start shrink-0 w-28 sm:w-32 group"><div class="rounded-lg overflow-hidden border border-gold/20 group-hover:border-gold shadow-lg transition-all group-hover:-translate-y-1"><img src="informe/p-08.jpg" alt="Página 8 del informe" loading="lazy" class="w-full block"></div><span class="block text-[10px] text-stone-500 group-hover:text-gold mt-1.5 text-center">8</span></button><button onclick="abrirInforme(9)" class="snap-start shrink-0 w-28 sm:w-32 group"><div class="rounded-lg overflow-hidden border border-gold/20 group-hover:border-gold shadow-lg transition-all group-hover:-translate-y-1"><img src="informe/p-09.jpg" alt="Página 9 del informe" loading="lazy" class="w-full block"></div><span class="block text-[10px] text-stone-500 group-hover:text-gold mt-1.5 text-center">9</span></button><button onclick="abrirInforme(10)" class="snap-start shrink-0 w-28 sm:w-32 group"><div class="rounded-lg overflow-hidden border border-gold/20 group-hover:border-gold shadow-lg transition-all group-hover:-translate-y-1"><img src="informe/p-10.jpg" alt="Página 10 del informe" loading="lazy" class="w-full block"></div><span class="block text-[10px] text-stone-500 group-hover:text-gold mt-1.5 text-center">10</span></button><button onclick="abrirInforme(11)" class="snap-start shrink-0 w-28 sm:w-32 group"><div class="rounded-lg overflow-hidden border border-gold/20 group-hover:border-gold shadow-lg transition-all group-hover:-translate-y-1"><img src="informe/p-11.jpg" alt="Página 11 del informe" loading="lazy" class="w-full block"></div><span class="block text-[10px] text-stone-500 group-hover:text-gold mt-1.5 text-center">11</span></button><button onclick="abrirInforme(12)" class="snap-start shrink-0 w-28 sm:w-32 group"><div class="rounded-lg overflow-hidden border border-gold/20 group-hover:border-gold shadow-lg transition-all group-hover:-translate-y-1"><img src="informe/p-12.jpg" alt="Página 12 del informe" loading="lazy" class="w-full block"></div><span class="block text-[10px] text-stone-500 group-hover:text-gold mt-1.5 text-center">12</span></button><button onclick="abrirInforme(13)" class="snap-start shrink-0 w-28 sm:w-32 group"><div class="rounded-lg overflow-hidden border border-gold/20 group-hover:border-gold shadow-lg transition-all group-hover:-translate-y-1"><img src="informe/p-13.jpg" alt="Página 13 del informe" loading="lazy" class="w-full block"></div><span class="block text-[10px] text-stone-500 group-hover:text-gold mt-1.5 text-center">13</span></button><button onclick="abrirInforme(14)" class="snap-start shrink-0 w-28 sm:w-32 group"><div class="rounded-lg overflow-hidden border border-gold/20 group-hover:border-gold shadow-lg transition-all group-hover:-translate-y-1"><img src="informe/p-14.jpg" alt="Página 14 del informe" loading="lazy" class="w-full block"></div><span class="block text-[10px] text-stone-500 group-hover:text-gold mt-1.5 text-center">14</span></button><button onclick="abrirInforme(15)" class="snap-start shrink-0 w-28 sm:w-32 group"><div class="rounded-lg overflow-hidden border border-gold/20 group-hover:border-gold shadow-lg transition-all group-hover:-translate-y-1"><img src="informe/p-15.jpg" alt="Página 15 del informe" loading="lazy" class="w-full block"></div><span class="block text-[10px] text-stone-500 group-hover:text-gold mt-1.5 text-center">15</span></button><button onclick="abrirInforme(16)" class="snap-start shrink-0 w-28 sm:w-32 group"><div class="rounded-lg overflow-hidden border border-gold/20 group-hover:border-gold shadow-lg transition-all group-hover:-translate-y-1"><img src="informe/p-16.jpg" alt="Página 16 del informe" loading="lazy" class="w-full block"></div><span class="block text-[10px] text-stone-500 group-hover:text-gold mt-1.5 text-center">16</span></button><button onclick="abrirInforme(17)" class="snap-start shrink-0 w-28 sm:w-32 group"><div class="rounded-lg overflow-hidden border border-gold/20 group-hover:border-gold shadow-lg transition-all group-hover:-translate-y-1"><img src="informe/p-17.jpg" alt="Página 17 del informe" loading="lazy" class="w-full block"></div><span class="block text-[10px] text-stone-500 group-hover:text-gold mt-1.5 text-center">17</span></button><button onclick="abrirInforme(18)" class="snap-start shrink-0 w-28 sm:w-32 group"><div class="rounded-lg overflow-hidden border border-gold/20 group-hover:border-gold shadow-lg transition-all group-hover:-translate-y-1"><img src="informe/p-18.jpg" alt="Página 18 del informe" loading="lazy" class="w-full block"></div><span class="block text-[10px] text-stone-500 group-hover:text-gold mt-1.5 text-center">18</span></button><button onclick="abrirInforme(19)" class="snap-start shrink-0 w-28 sm:w-32 group"><div class="rounded-lg overflow-hidden border border-gold/20 group-hover:border-gold shadow-lg transition-all group-hover:-translate-y-1"><img src="informe/p-19.jpg" alt="Página 19 del informe" loading="lazy" class="w-full block"></div><span class="block text-[10px] text-stone-500 group-hover:text-gold mt-1.5 text-center">19</span></button><button onclick="abrirInforme(20)" class="snap-start shrink-0 w-28 sm:w-32 group"><div class="rounded-lg overflow-hidden border border-gold/20 group-hover:border-gold shadow-lg transition-all group-hover:-translate-y-1"><img src="informe/p-20.jpg" alt="Página 20 del informe" loading="lazy" class="w-full block"></div><span class="block text-[10px] text-stone-500 group-hover:text-gold mt-1.5 text-center">20</span></button><button onclick="abrirInforme(21)" class="snap-start shrink-0 w-28 sm:w-32 group"><div class="rounded-lg overflow-hidden border border-gold/20 group-hover:border-gold shadow-lg transition-all group-hover:-translate-y-1"><img src="informe/p-21.jpg" alt="Página 21 del informe" loading="lazy" class="w-full block"></div><span class="block text-[10px] text-stone-500 group-hover:text-gold mt-1.5 text-center">21</span></button></div>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer & Contacto Directo -->
     <footer id="contacto" class="bg-wineDeep text-white pt-16 pb-12 border-t border-gold/30 relative z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -505,6 +557,25 @@
 
     </div> <!-- Fin deviceContainer -->
 
+    <!-- Visor del informe -->
+    <div id="visorInforme" class="fixed inset-0 z-[100] hidden bg-black/95 backdrop-blur-sm flex-col" role="dialog" aria-modal="true">
+        <div class="flex items-center justify-between px-4 h-14 border-b border-gold/20 text-stone-300 shrink-0">
+            <span class="font-cinzel text-gold text-sm font-bold">Informe Lexus</span>
+            <span id="visorContador" class="text-xs">1 / 21</span>
+            <div class="flex items-center gap-4">
+                <a href="informe/Lexus_Carpeta_de_Campo.pdf" download class="text-gold hover:text-goldLight" aria-label="Descargar PDF"><i class="fa-solid fa-file-arrow-down"></i></a>
+                <button onclick="cerrarInforme()" class="text-stone-300 hover:text-gold text-xl" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+        </div>
+        <div id="visorArea" class="relative flex-1 flex items-center justify-center overflow-auto p-3 sm:p-6">
+            <img id="visorImg" src="" alt="Página del informe" class="max-h-full max-w-full object-contain rounded shadow-2xl bg-white">
+            <button onclick="pasarPagina(-1)" class="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-wineDeep/80 border border-gold/40 text-gold hover:bg-gold hover:text-wineDeep" aria-label="Anterior"><i class="fa-solid fa-chevron-left"></i></button>
+            <button onclick="pasarPagina(1)" class="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-wineDeep/80 border border-gold/40 text-gold hover:bg-gold hover:text-wineDeep" aria-label="Siguiente"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+
+
     <!-- Botón Flotante de WhatsApp -->
     <a href="https://wa.me/5492634785174?text=Buenas!%20Hola%20Lexus!%20Quisiera%20encargar%20un%20mueble%20artesanal" target="_blank" class="fixed bottom-6 right-6 z-50 bg-ecoGreen hover:bg-ecoGreenLight text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-all border-2 border-white/80">
         <i class="fa-brands fa-whatsapp text-3xl"></i>
@@ -538,6 +609,54 @@
         }
 
         // Función Global para Encargar vía WhatsApp con el formato predeterminado
+
+        // VISOR DEL INFORME (páginas como imágenes, funciona en celular sin visor de PDF)
+        const TOTAL_PAGINAS = 21;
+        let paginaActual = 1;
+        function mostrarPagina() {
+            const n = String(paginaActual).padStart(2, '0');
+            document.getElementById('visorImg').src = 'informe/g-' + n + '.jpg';
+            document.getElementById('visorContador').textContent = paginaActual + ' / ' + TOTAL_PAGINAS;
+            const sig = paginaActual < TOTAL_PAGINAS ? String(paginaActual + 1).padStart(2, '0') : null;
+            if (sig) { const pre = new Image(); pre.src = 'informe/g-' + sig + '.jpg'; }
+        }
+        function abrirInforme(p) {
+            paginaActual = p || 1;
+            const v = document.getElementById('visorInforme');
+            v.classList.remove('hidden'); v.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+            mostrarPagina();
+        }
+        function cerrarInforme() {
+            const v = document.getElementById('visorInforme');
+            v.classList.add('hidden'); v.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+        function pasarPagina(d) {
+            paginaActual = Math.min(TOTAL_PAGINAS, Math.max(1, paginaActual + d));
+            mostrarPagina();
+        }
+        document.addEventListener('keydown', function(e) {
+            const v = document.getElementById('visorInforme');
+            if (!v || v.classList.contains('hidden')) return;
+            if (e.key === 'Escape') cerrarInforme();
+            if (e.key === 'ArrowRight') pasarPagina(1);
+            if (e.key === 'ArrowLeft') pasarPagina(-1);
+        });
+        (function() {
+            let x0 = null;
+            const area = document.getElementById('visorArea');
+            if (!area) return;
+            area.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, { passive: true });
+            area.addEventListener('touchend', e => {
+                if (x0 === null) return;
+                const dx = e.changedTouches[0].clientX - x0;
+                if (Math.abs(dx) > 50) pasarPagina(dx < 0 ? 1 : -1);
+                x0 = null;
+            });
+            area.addEventListener('click', e => { if (e.target === area) cerrarInforme(); });
+        })();
+
         function encargarProducto(modelo, precio) {
             const mensaje = `Buenas! Hola Lexus! Quisiera encargar el siguiente mueble artesanal:\n• *Modelo:* ${modelo}\n• *Acabado:* Roble Natural\n• *Cantidad:* 1 unidad(es)\n• *Total Estimado:* ${precio}\n\nMuchas gracias!`;
             const encoded = encodeURIComponent(mensaje);
